@@ -11,13 +11,12 @@ import subprocess
 from PyQt6 import QtGui
 from Utility import Util
 from PIL import Image
-from Threads import CheckProcessedVideo, ProcessVideo
+from Threads.Threads import CheckProcessedVideo, ProcessVideo, ImageLoader, GifLoader
 from collections import Counter
 import sys
 from Core.LiveWallPIDManager import LiveWallPIDManager
 from Core.LiveWallPlayer import  LiveWallPlayer
 from Core.LiveWallState import  LiveWallState
-from Threads import ImageLoader, GifLoader
 import time
 import tempfile
 
@@ -238,11 +237,11 @@ class VideoThumbnailWidget(QWidget):
         self.thumbnail_label = None
         self.preview_widget = None
 
-        self.videoCheckThread = CheckProcessedVideo.CheckProcessedVideo(video_path=video_path)
+        self.videoCheckThread = CheckProcessedVideo(video_path=video_path)
         self.videoCheckThread.video_checked.connect(self.on_video_checked)
         self.videoCheckThread.start()
 
-        self.videoProcessThread = ProcessVideo.ProcessVideo(video_path=video_path)
+        self.videoProcessThread = ProcessVideo(video_path=video_path)
         self.videoProcessThread.video_processed.connect(self.on_video_processed)
         # Load play/stop icons
         play_icon_path = Util.get_file_path("../play_icon.png")
@@ -940,8 +939,8 @@ class MyLiveWallWidget(QMainWindow):
 
     def start_thumbnail_loading(self, thumbnail, video_path, is_current):
         """Inicia o carregamento das miniaturas em background"""
-        thumbnail_loaderImg = ImageLoader.ImageLoader(video_path)
-        thumbnail_loaderGif = GifLoader.GifLoader(video_path)
+        thumbnail_loaderImg = ImageLoader(video_path)
+        thumbnail_loaderGif = GifLoader(video_path)
 
         thumbnail_loaderImg.thumbnail_ready.connect(self.on_thumbnail_loadedImg)
         thumbnail_loaderGif.thumbnail_ready.connect(self.on_thumbnail_loadedGif)

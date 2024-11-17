@@ -45,7 +45,7 @@ class ProcessVideo(QThread):
         print(f"Preprocessed video: {output_path}")
         try:
             subprocess.run([
-                '.././ffmpeg',
+                './ffmpeg',
                 '-y',
                 '-hwaccel', 'vulkan',
                 '-init_hw_device', 'vulkan=gpu:0',
@@ -75,7 +75,7 @@ class CheckProcessedVideo(QThread):
     def run(self):
         # Carregar miniaturas
         cmd = [
-            '.././ffprobe',
+            './ffprobe',
             '-v', 'error',
             '-show_entries', 'format_tags=preprocessed',
             '-of', 'default=noprint_wrappers=1:nokey=1',
